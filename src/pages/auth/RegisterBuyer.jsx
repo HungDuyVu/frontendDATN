@@ -7,7 +7,7 @@ import { registerBuyer } from '@/store/slices/UserSlice';
 
 const RegisterBuyer = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     phone: "",
     password: "",
@@ -74,9 +74,9 @@ const RegisterBuyer = () => {
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
               <input
                 type='text'
-                name='name'
-                placeholder='Name'
-                value={formData.name}
+                name='username'
+                placeholder='username'
+                value={formData.username}
                 onChange={handleOnChange}
                 className='w-full p-2 border border-secondary rounded mb-4 focus:border-primary focus:outline-none focus:shadow-xl focus:shadow-primary transition-shadow duration-300'
                 required

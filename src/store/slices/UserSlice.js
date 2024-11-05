@@ -9,7 +9,7 @@ const getToken = () => {
 // Đăng ký người mua
 export const registerBuyer = createAsyncThunk("auth/register-buyer", async (formData) => {
    try {
-      const request = await axios.post("http://localhost:5000/api/auth/register-buyer", formData, {
+      const request = await axios.post("http://project.infinityfreeapp.com/api/customer/register", formData, {
          headers: {
             "Content-Type": "application/json",
          },
@@ -21,7 +21,7 @@ export const registerBuyer = createAsyncThunk("auth/register-buyer", async (form
    }
 });
 
-// Đăng ký người ban
+// Đăng ký người bán
 export const registerSeller = createAsyncThunk("auth/register-seller", async (formData) => {
    try {
       const request = await axios.post("http://localhost:5000/api/auth/register-seller", formData, {
@@ -32,11 +32,11 @@ export const registerSeller = createAsyncThunk("auth/register-seller", async (fo
       });
       return request.data;
    } catch (error) {
-      console.log("Error register buyer: " + error.message);
+      console.log("Error register seller: " + error.message);
    }
 });
 
-// Đăng ký dong vi van chuyen
+// Đăng ký đơn vị vận chuyển
 export const registerDelivery = createAsyncThunk("auth/register-delivery", async (formData) => {
    try {
       const request = await axios.post("http://localhost:5000/api/auth/register-delivery", formData, {
@@ -47,15 +47,14 @@ export const registerDelivery = createAsyncThunk("auth/register-delivery", async
       });
       return request.data;
    } catch (error) {
-      console.log("Error register buyer: " + error.message);
+      console.log("Error register delivery: " + error.message);
    }
 });
-
 
 // Đăng nhập người dùng
 export const loginUser = createAsyncThunk("auth/login", async (formData) => {
    try {
-      const request = await axios.post("http://localhost:5000/api/auth/login", formData, {
+      const request = await axios.post("http://project.infinityfreeapp.com/api/login", formData, {
          headers: {
             "Content-Type": "application/json",
          },
@@ -67,35 +66,20 @@ export const loginUser = createAsyncThunk("auth/login", async (formData) => {
    }
 });
 
-
 // Đăng xuất người dùng
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
    try {
-      const request = await axios.post("http://localhost:5000/api/auth/logout", {}, {
+      const token = getToken(); 
+      const request = await axios.get("http://project.infinityfreeapp.com/api/logout", {}, {
          headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, 
          },
          withCredentials: true,
       });
       return request.data;
    } catch (error) {
       console.log("Error logout: " + error.message);
-   }
-});
-
-// Kiểm tra trạng thái xác thực
-export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
-   const token = getToken();
-   try {
-      const request = await axios.get("http://localhost:5000/api/auth/checkAuth", {
-         headers: {
-            "Authorization": `Bearer ${token}`,
-         },
-         withCredentials: true,
-      });
-      return request.data;
-   } catch (error) {
-      console.log("Error checking auth: " + error.message);
    }
 });
 
@@ -118,7 +102,7 @@ const userSlice = createSlice({
          })
          .addCase(registerBuyer.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.user =  action.payload.user;
+            state.user = action.payload?.user || null;
          })
          .addCase(registerBuyer.rejected, (state) => {
             state.isLoading = false;
@@ -130,7 +114,7 @@ const userSlice = createSlice({
          })
          .addCase(registerSeller.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.user =action.payload.user ;
+            state.user = action.payload?.user || null;
          })
          .addCase(registerSeller.rejected, (state) => {
             state.isLoading = false;
@@ -142,7 +126,7 @@ const userSlice = createSlice({
          })
          .addCase(registerDelivery.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.user =  action.payload.user;
+            state.user = action.payload?.user || null;
          })
          .addCase(registerDelivery.rejected, (state) => {
             state.isLoading = false;
@@ -154,11 +138,7 @@ const userSlice = createSlice({
          })
          .addCase(loginUser.fulfilled, (state, action) => {
             state.isLoading = false;
-            if (action.payload.success) {
-               state.user = action.payload.user; 
-            } else {
-               state.user = null;
-            }
+            state.user = action.payload?.success ? action.payload.user : null;
          })
          .addCase(loginUser.rejected, (state) => {
             state.isLoading = false;

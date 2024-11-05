@@ -7,7 +7,7 @@ import { loginUser } from '@/store/slices/UserSlice';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -33,10 +33,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validatePassword(formData.password)) {
-      setErrorMessage("Password must be at least 8 characters, contain an uppercase letter, a lowercase letter, and a special character.");
-      return;
-    }
+    // if (!validatePassword(formData.password)) {
+    //   setErrorMessage("Password must be at least 8 characters, contain an uppercase letter, a lowercase letter, and a special character.");
+    //   return;
+    // }
 
     setErrorMessage(""); // Clear error message if password is valid
 
@@ -91,10 +91,10 @@ const Login = () => {
             </div>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
               <input
-                type='email'
-                name='email'
-                placeholder='Email'
-                value={formData.email}
+                type='text'
+                name='username'
+                placeholder='username'
+                value={formData.username}
                 onChange={handleOnChange}
                 className='w-full p-2 border border-secondary rounded mb-4 focus:border-primary focus:outline-none focus:shadow-xl focus:shadow-primary transition-shadow duration-300'
                 required
